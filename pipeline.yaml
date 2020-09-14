@@ -1,0 +1,39 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: hello-pipeline
+spec:
+  workspaces:
+    - name: shared-workspace
+  resources:
+    - name: build-image
+      type: image
+  tasks:
+    - name: fetch-repository
+      taskRef:
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: shared-workspace
+      params:
+        - name: url
+          value: https://github.com/zxDiscovery/hello
+        - name: deleteExisting
+          value: "true"
+    - name: buildpacks
+      taskRef:
+        name: buildpacks
+      runAfter:
+        - fetch-repository
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+      params:
+        - name: BUILDER_IMAGE
+          value: paketobuildpacks/builder:tiny
+        - name: CACHE
+          value: buildpacks-cache
+      resources:
+        outputs:
+          - name: image
+            resource: build-image
