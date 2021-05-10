@@ -29,3 +29,7 @@ func test3() {
 func test4() {
 
 }
+
+func test5() {
+
+}
