@@ -17,3 +17,7 @@ func HelloServer(w http.ResponseWriter, r *http.Request) {
 func test() {
 
 }
+
+func test2() {
+
+}
